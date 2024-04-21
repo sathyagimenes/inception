@@ -28,5 +28,5 @@ SHOW DATABASES;
 ## Comando para acessar a base de dados
 USE wordpress_db;
 
-## Comando para listas as tabelas da base de dados
-USE wordpress_db;
+## Comando para listar as tabelas da base de dados
+SHOW TABLES;
