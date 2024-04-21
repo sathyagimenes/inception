@@ -22,5 +22,11 @@ sudo docker exec -it ce76bab602fa bash
 ## Comando para entrar no database
 mariadb
 
-## Comando para listas as tabelas
+## Comando para listar as bases de dados
 SHOW DATABASES;
+
+## Comando para acessar a base de dados
+USE wordpress_db;
+
+## Comando para listas as tabelas da base de dados
+USE wordpress_db;
