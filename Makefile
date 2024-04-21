@@ -6,7 +6,7 @@
 #    By: sde-cama <sde-cama@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/20 18:19:15 by sde-cama          #+#    #+#              #
-#    Updated: 2024/04/21 14:46:20 by sde-cama         ###   ########.fr        #
+#    Updated: 2024/04/21 15:26:01 by sde-cama         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,9 @@ host:
 up:
 	@sudo mkdir -p "$(VOLUMES)/wordpress" "$(VOLUMES)/mariadb"
 	$(DOCKER_COMPOSE) up -d --build
+	# Builds, (re)creates, starts, and attaches to containers for a service.
+	# --buld: 
+	# -d: Detached mode. Run containers in the background
 
 ls:
 	@docker volume ls
