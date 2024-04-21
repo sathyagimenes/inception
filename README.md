@@ -17,6 +17,9 @@ sudo docker ps
 ### Comando para entrar no container
 sudo docker exec -it ce76bab602fa bash
 
+### Comando para limpar ambiente
+docker stop $(docker ps -qa); docker rm $(docker ps -qa); docker rmi -f $(docker images -qa); docker volume rm $(docker volume ls -q); docker network rm $(docker network ls -q) 2>/dev/null
+
 # MariaDB
 
 ### Comando para entrar no database
