@@ -1,21 +1,21 @@
 version: "3.8"
 
 services:
-  # nginx:
-  #   image: nginx:42sp
-  #   container_name: nginx
-  #   build:
-  #     context: requirements/nginx
-  #     args:
-  #       - LOGIN
-  #   networks:
-  #     - inception
-  #   ports:
-  #     - 443:443
-  #   volumes:
-  #     - wordpress:/var/www/html
-  #   depends_on:
-  #     - wordpress
+  nginx:
+    image: nginx:42sp
+    container_name: nginx
+    build:
+      context: requirements/nginx
+      args:
+        - LOGIN
+    networks:
+      - inception
+    ports:
+      - 443:443
+    volumes:
+      - wordpress:/var/www/html
+    # depends_on:
+    #   - wordpress
 
   # wordpress:
   #   image: wordpress:42sp
