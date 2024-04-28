@@ -1,6 +1,8 @@
 # Use the penultimate version of debian image as the base
 FROM debian:bullseye
 
+ARG LOGIN
+
 # Install packages:
 # - nginx - required, nginx itself
 # - openssl - used to create self-signed SSL certificates
@@ -35,9 +37,6 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 
 # Copy the nginx configuration file to nginx's default configuration directory
 COPY ./conf/nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose port 443 for communication with the web and other containers
-EXPOSE 443
 
 # Run nginx with arguments:
 # -g daemon off; tells nginx to run in the foreground
