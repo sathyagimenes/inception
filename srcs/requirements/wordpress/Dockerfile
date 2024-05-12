@@ -1,0 +1,29 @@
+# Use the penultimate version of debian image as the base
+FROM debian:bullseye
+
+WORKDIR /var/www/html/
+
+RUN apt-get update -y && apt-get upgrade -y \
+&&  apt-get install wget php-fpm php-mysql -y
+
+# This command is used to modify the "listen" parameter in the www.conf file of PHP-FPM.
+# It replaces the existing value with "0.0.0.0:9000", which means PHP-FPM will listen on all network interfaces on port 9000.
+# The sed command is used to perform the replacement.
+RUN sed -i "/^listen\s=.*/c\listen = 0.0.0.0:9000" \
+      /etc/php/[0-9]*.[0-9]*/fpm/pool.d/www.conf \
+&&  mkdir -p /run/php \
+&&  ln -s $(find /usr/sbin -name 'php-fpm*') /usr/bin/php-fpm
+
+# Download and install WP-CLI (WordPress Command Line Interface)
+RUN wget "https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar" \
+&&  chmod +x wp-cli.phar \
+&&  mv wp-cli.phar /usr/local/bin/wp
+
+COPY tools/wp_setup.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/wp_setup.sh
+
+ENTRYPOINT ["wp_setup.sh"]
+
+# Arguments to run wordpress
+# PHP-FPM (FastCGI Process Manager) in the foreground
+CMD ["php-fpm", "-F"]
