@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   nginx:
@@ -71,3 +71,4 @@ volumes:
       o: bind
       type: none
       device: /home/${LOGIN}/data/wordpress
+      

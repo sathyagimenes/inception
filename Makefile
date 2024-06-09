@@ -1,18 +1,8 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: sde-cama <sde-cama@student.42sp.org.br>    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/04/20 18:19:15 by sde-cama          #+#    #+#              #
-#    Updated: 2024/04/21 15:26:01 by sde-cama         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 LOGIN=sde-cama
 DOCKER_COMPOSE=@docker-compose -f srcs/docker-compose.yml
 VOLUMES="/home/$(LOGIN)/data"
+
+all: host up
 
 host:
 	@sudo grep -q $(LOGIN) /etc/hosts || sudo sed -i "3i127.0.0.1\t$(LOGIN).42.fr" /etc/hosts

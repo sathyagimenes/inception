@@ -10,10 +10,6 @@ RUN apt-get update -y \
 && apt-get upgrade -y \
 && apt-get install nginx openssl -y
 
-# Create necessary directories:
-# - /etc/nginx/ssl: directory where the certificates will be stored on
-RUN mkdir -p /etc/nginx/ssl
-
 # Generate the self-signed SSL certificates using openssl:
 # - req: command used to process certificate;
 # - -x509: option to create a X.509 certificate, which is a standard format for digital certificates;
@@ -30,16 +26,17 @@ RUN mkdir -p /etc/nginx/ssl
 #   - CN: specify commom name, A.K.A. domain name.
 RUN openssl req -batch -x509 \
     -sha256 -nodes -newkey rsa:4096 -days 365 \
-    -keyout /etc/nginx/ssl/nginx.key \
-    -out /etc/nginx/ssl/nginx.crt \
-	-subj "/C=BR/ST=SP/L=Sao Paulo/O=42SP/CN=42sp.org.br"
+    -out /etc/ssl/certs/nginx-selfsigned.crt \
+    -keyout /etc/ssl/private/nginx-selfsigned.key \
+    -subj "/O=42sp/OU=42 Sao Paulo/CN=42sp.org.br"
 
 # Copy the nginx configuration file to nginx's default configuration directory
-COPY ./conf/nginx.conf /etc/nginx/conf.d/
+COPY ./conf/https.conf /etc/nginx/conf.d/
+COPY ./conf/ssl.conf /etc/nginx/snippets/
 
 # This command replaces the string "LOGIN" with the value of the environment variable "LOGIN"
 # in the file /etc/nginx/conf.d/nginx.conf using the sed command.
-RUN sed -i "s/LOGIN/${LOGIN}/g" /etc/nginx/conf.d/nginx.conf
+RUN sed -i "s/LOGIN/${LOGIN}/g" /etc/nginx/conf.d/https.conf
 
 # Run nginx with arguments:
 # -g daemon off; tells nginx to run in the foreground

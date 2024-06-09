@@ -20,7 +20,7 @@ wp config create \
   --dbhost=mariadb \
   --dbprefix="wp_"
 
-# Installs WordPress with provided configuration skipping the email notification.
+# Configures WordPress Domain and Admin User.
 wp core install \
   --url="$DOMAIN" \
   --title="$WP_TITLE" \
