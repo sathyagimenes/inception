@@ -33,3 +33,18 @@ USE wordpress_db;
 
 ### Comando para listar as tabelas da base de dados
 SHOW TABLES;
+
+# .env
+### Exemplo de variaveis de ambiente para configurar no arquivo .env
+LOGIN=sde-cama
+DOMAIN="${LOGIN}.42.fr"
+
+WP_TITLE=Inception
+WP_ADMIN_USER="${LOGIN}"
+WP_ADMIN_PASS=wppass
+WP_ADMIN_EMAIL="${LOGIN}@email.com"
+WP_DATABASE=wordpress_db
+
+WP_USER=wpuser
+WP_USER_PASS=wppass
+WP_USER_EMAIL=wpuser@email.com
