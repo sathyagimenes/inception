@@ -1,52 +1,50 @@
 LOGIN=sde-cama
-DOCKER_COMPOSE=@docker-compose -f srcs/docker-compose.yml
+DOMAIN_NAME="$(LOGIN).42.fr"
 VOLUMES="/home/$(LOGIN)/data"
 
-all: host up
+all: hosts volumes fix up
 
-host:
-	@sudo grep -q $(LOGIN) /etc/hosts || sudo sed -i "3i127.0.0.1\t$(LOGIN).42.fr" /etc/hosts
+fix:
+	sudo apt -y purge "^virtualbox-.*"
+	sudo apt -y autoremove
+	sudo apt -y install docker-compose-plugin
+
+hosts:
+	@if ! grep "$(DOMAIN_NAME)" /etc/hosts; then \
+		sudo sed -i '2i\127.0.0.1\t$(DOMAIN_NAME)' /etc/hosts; \
+	fi
+
+volumes:
+	@sudo mkdir -p $(VOLUMES)/wordpress
+	@sudo docker volume create --driver local --opt type=none --opt device=$(VOLUMES)/wordpress --opt o=bind wordpress
+	@sudo mkdir -p $(VOLUMES)/mariadb
+	@sudo docker volume create --driver local --opt type=none --opt device=$(VOLUMES)/mariadb --opt o=bind mariadb
+	@sudo mkdir -p $(VOLUMES)/static
+	@sudo docker volume create --driver local --opt type=none --opt device=$(VOLUMES)/static --opt o=bind static
 
 up:
-	@sudo mkdir -p "$(VOLUMES)/wordpress" "$(VOLUMES)/mariadb"
-	$(DOCKER_COMPOSE) up -d --build
+	@docker compose -f ./srcs/docker-compose.yml up -d --build
 	# Builds, (re)creates, starts, and attaches to containers for a service.
 	# --buld: 
 	# -d: Detached mode. Run containers in the background
 
-ls:
-	@docker volume ls
-
 down:
-	$(DOCKER_COMPOSE) down
+	@docker compose -f ./srcs/docker-compose.yml down
 
-start:
-	$(DOCKER_COMPOSE) start
+inspec:
+	docker exec -it wordpress /bin/bash
 
-stop:
-	$(DOCKER_COMPOSE) stop
-
-shell:
-	@read -p "=> Enter service: " service; \
-	$(DOCKER_COMPOSE) exec -it $$service /bin/sh
-
-## Status
-ps:
-	$(DOCKER_COMPOSE) ps
-
-logs:
-	$(DOCKER_COMPOSE) logs
-
-## Stop and Remove Containers
 clean:
-	$(DOCKER_COMPOSE) down --rmi all --volumes
+	@docker volume rm mariadb
+	@docker volume rm wordpress
+	@docker volume rm static
+	@sudo rm -rf $(VOLUMES)/mariadb
+	@sudo rm -rf $(VOLUMES)/wordpress
+	@sudo rm -rf $(VOLUMES)/static
 
-## Full Cleanup (Remove Images and Volumes)
 fclean: clean
-	@sudo rm -rf $(VOLUMES)
+	docker builder prune -f
 
-## Deep Cleanup (Remove Unused Objects)
-prune: fclean
-	@docker system prune --all --force --volumes
+re: down fclean all
 
-.PHONY: shell up down start stop ps clean fclean prune ls
+.PHONY: up down inspec clean fclean re

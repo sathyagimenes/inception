@@ -1,28 +1,22 @@
-# Use the penultimate version of debian image as the base
 FROM debian:bullseye
 
-# Set variables
-ARG WP_ADMIN_USER
-ARG WP_ADMIN_PASS
-ARG WP_DATABASE
+ARG MYSQL_DATABASE
+ARG MYSQL_USER
+ARG MYSQL_PASSWORD
+ARG MYSQL_ROOT_PASSWORD
 
-# Install MariaDB
-RUN apt-get update -y \
-&& apt-get upgrade -y \
-&& apt-get install mariadb-server -y
+RUN apt -y update && apt -y install mariadb-server && rm -rf /var/lib/apt/lists/*
 
-# Copy configuration file to the container's etc directory
-RUN echo "[mysqld] \n\
-skip-networking=0 \n\
-skip-bind-address" >> /etc/mysql/my.cnf
+RUN mkdir -p /var/lib/mysql /var/run/mysqld
+RUN chown -R mysql:mysql /var/lib/mysql /var/run/mysqld
+RUN chmod 777 /var/run/mysqld
 
-# Copy setup script to the container's bin directory
-COPY conf/ /usr/bin/
-# Change setup script permissions so it becomes executable
-RUN chmod +x /usr/bin/setup.sh
+COPY ./conf/mariadb.cnf /etc/mysql/mariadb.conf.d/
+RUN chmod 644 /etc/mysql/mariadb.conf.d/mariadb.cnf
 
-# Starts the MariaDB service and execute the setup script
-RUN service mariadb start && /usr/bin/setup.sh
+COPY ./tools/mariadb.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/mariadb.sh
+RUN bash /usr/local/bin/mariadb.sh
 
-# Run MySQL daemon with address binding to 0.0.0.0* - the server will listen on all available network interfaces
-CMD ["mysqld_safe"]
+EXPOSE 3306
+CMD [ "mysqld_safe" ]
