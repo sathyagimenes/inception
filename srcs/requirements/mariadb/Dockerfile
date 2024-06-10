@@ -21,6 +21,9 @@ COPY conf/ /usr/bin/
 # Change setup script permissions so it becomes executable
 RUN chmod +x /usr/bin/setup.sh
 
+# Expose port 3306 for communication with other containers
+EXPOSE 3306
+
 # Starts the MariaDB service and execute the setup script
 RUN service mariadb start && /usr/bin/setup.sh
 
