@@ -1,6 +1,7 @@
 FROM debian:bullseye
 
 ARG LOGIN
+ARG DOMAIN_NAME
 
 RUN apt-get update && apt-get install -y nginx openssl && rm -rf /var/lib/apt/lists/*
 

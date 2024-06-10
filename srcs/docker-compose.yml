@@ -18,6 +18,7 @@ services:
       context: requirements/nginx
       args:
         - LOGIN
+        - DOMAIN_NAME
     image: nginx
     container_name: nginx
     ports:

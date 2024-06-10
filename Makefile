@@ -19,8 +19,6 @@ volumes:
 	@sudo docker volume create --driver local --opt type=none --opt device=$(VOLUMES)/wordpress --opt o=bind wordpress
 	@sudo mkdir -p $(VOLUMES)/mariadb
 	@sudo docker volume create --driver local --opt type=none --opt device=$(VOLUMES)/mariadb --opt o=bind mariadb
-	@sudo mkdir -p $(VOLUMES)/static
-	@sudo docker volume create --driver local --opt type=none --opt device=$(VOLUMES)/static --opt o=bind static
 
 up:
 	@docker compose -f ./srcs/docker-compose.yml up -d --build
@@ -37,10 +35,8 @@ inspec:
 clean:
 	@docker volume rm mariadb
 	@docker volume rm wordpress
-	@docker volume rm static
 	@sudo rm -rf $(VOLUMES)/mariadb
 	@sudo rm -rf $(VOLUMES)/wordpress
-	@sudo rm -rf $(VOLUMES)/static
 
 fclean: clean
 	docker builder prune -f
