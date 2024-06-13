@@ -34,6 +34,13 @@ USE wordpress_db;
 ### Comando para listar as tabelas da base de dados
 SHOW TABLES;
 
+# Wordpress
+### Dominio
+https://sde-cama.42.fr
+
+### Login
+https://sde-cama.42.fr/wp-admin
+
 # .env
 ### Exemplo de variaveis de ambiente para configurar no arquivo .env
 LOGIN=sde-cama
