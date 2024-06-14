@@ -17,7 +17,7 @@ skip-networking=0 \n\
 skip-bind-address" >> /etc/mysql/my.cnf
 
 # Copy setup script to the container's bin directory
-COPY conf/ /usr/bin/
+COPY tools/ /usr/bin/
 # Change setup script permissions so it becomes executable
 RUN chmod +x /usr/bin/setup.sh
 

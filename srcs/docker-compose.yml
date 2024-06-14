@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   nginx:
-    image: nginx:42sp
+    image: nginx
     container_name: nginx
     build:
       context: requirements/nginx
@@ -14,11 +14,12 @@ services:
       - 443:443
     volumes:
       - wordpress:/var/www/html
+    restart: always
     depends_on:
       - wordpress
 
   wordpress:
-    image: wordpress:42sp
+    image: wordpress
     container_name: wordpress
     build: requirements/wordpress
     environment:
@@ -37,11 +38,12 @@ services:
       - inception
     volumes:
       - wordpress:/var/www/html
+    restart: always
     depends_on:
       - mariadb
 
   mariadb:
-    image: mariadb:42sp
+    image: mariadb
     container_name: mariadb
     build:
       context: requirements/mariadb
@@ -55,6 +57,7 @@ services:
       - inception
     volumes:
       - mariadb:/var/lib/mysql
+    restart: always
 
 networks:
   inception:
